@@ -1,0 +1,67 @@
+.content1{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+.charts{
+    /* border: 2px solid red; */
+    width: 100%;
+    box-shadow: rgba(0, 0, 0, 0.25) 0px 0.0625em 0.0625em, rgba(0, 0, 0, 0.25) 0px 0.125em 0.5em, rgba(255, 255, 255, 0.1) 0px 0px 0px 1px inset;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 10px;
+    padding-bottom: 10px;
+    
+}
+.charts-head1{
+    height: 30px;
+    background-color: rgb(1, 256, 220);
+    color: black;
+    border-radius: 20px;
+    display: flex;
+    justify-content: center;
+    /* align-items: center; */
+    
+}
+.charts-head2{
+    height: 30px;
+    background-color: rgb(237,125,49);
+    color: white;
+    border-radius: 20px;
+    display: flex;
+    justify-content: center;
+    /* align-items: center; */
+    
+}
+
+.charts-head4{
+    height: 30px;
+    background-color: rgb(255,193,0);
+    color: rgb(19, 6, 6);
+    border-radius: 20px;
+    display: flex;
+    justify-content: center;
+    /* align-items: center; */
+    
+}
+
+.home-main{
+    margin-top: 70px;
+    display: flex;
+    flex-direction: column;
+    /* gap: 40px; */
+}
+.content2{
+    margin: 15px;
+}
+
+@media screen  and (max-width: 1080px){
+    .content1{
+        flex-direction: column;
+    }
+}

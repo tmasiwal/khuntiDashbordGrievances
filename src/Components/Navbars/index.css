@@ -1,0 +1,16 @@
+.navbar-custom{
+  background-color: rgb(57, 56, 56);
+  color: #FFFFFF;
+  width: 100%;
+  /* margin-bottom: 10px; */
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 9999;
+  
+}
+.navbar-custom .navbar-brand,
+.navbar-custom .nav-link,
+.navbar-custom .navbar-toggler {
+  color: rgb(243, 232, 232) !important;
+}
