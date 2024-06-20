@@ -12,6 +12,7 @@ const BarChartBlock = ({ modalOpen }) => {
   const { ranges } = useContext(MyContext);
 
   useEffect(() => {
+    setGrievanceData([])
     const fetchData = async () => {
       setLoading(true);
       let url;

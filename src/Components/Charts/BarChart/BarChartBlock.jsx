@@ -36,6 +36,7 @@ const BarChartBlock = ({ modalOpen }) => {
   const chartData = initializeChartData();
 
   useEffect(() => {
+    setData([])
     if (loginuser === "admin") {
       axios
         .get(
