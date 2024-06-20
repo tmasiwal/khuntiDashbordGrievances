@@ -164,3 +164,9 @@
   margin-top: 75px;
   background-color: rgb(179, 192, 201);
 }
+
+@media screen  and (max-width: 1080px){
+    .login-main{
+      width: 100%;
+    }
+}

@@ -14,3 +14,10 @@
 .navbar-custom .navbar-toggler {
   color: rgb(243, 232, 232) !important;
 }
+
+
+@media screen  and (max-width: 1080px){
+    .navbar-bg-color{
+      background-color: rgb(72,180,255);
+    }
+}

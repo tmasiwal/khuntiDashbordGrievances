@@ -54,7 +54,7 @@ const Navbars = () => {
   return (
     <Navbar
       expand="lg"
-      className="bg-indigo-200 border-bottom px-3 navbar-custom"
+      className="bg-indigo-200 border-bottom px-3 navbar-custom navbar-bg-color"
       style={{ color: "white" }}
     >
       <Container fluid>
@@ -64,7 +64,7 @@ const Navbars = () => {
         <Navbar.Collapse id="navbarScroll">
           <Nav
             className="my-2 my-lg-0 ms-auto"
-            style={{ maxHeight: "100px" }}
+            style={{ maxHeight: "100px"  }}
             navbarScroll
           >
             <NavDropdown title={displayedTimeRange} id="basic-nav-dropdown">
