@@ -93,7 +93,7 @@ const GrievancesTable = ({ modalOpen, setModalOpen }) => {
     status: getStatus(grievance.state),
     id: grievance._id,
     action: grievance.action,
-    date: dayjs(grievance.timestamp).format("DD-MM-YYYY"),
+    date: grievance.timestamp,
   }));
 
   const handleButtonClick = (increment) => {
@@ -102,6 +102,7 @@ const GrievancesTable = ({ modalOpen, setModalOpen }) => {
 
   const handleRowClick = (grievance) => {
     setSelectedGrievance(grievance);
+    console.log(grievance)
     setModalOpen(true);
   };
 
@@ -139,7 +140,7 @@ const GrievancesTable = ({ modalOpen, setModalOpen }) => {
 
   return (
     <Paper
-      sx={{ width: "100%", overflow: "hidden" }}
+      sx={{ width: "100%", overflow: "auto" }}
       className="TableContainer"
     >
       <div className="flex-container">

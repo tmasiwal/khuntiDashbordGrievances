@@ -8,6 +8,9 @@ const Home = () => {
   const [modalOpen, setModalOpen] = useState(false);
   return (
     <div className="home-main">
+      <div className="content2">
+        <GrievancesTable modalOpen={modalOpen} setModalOpen={setModalOpen} />
+      </div>
       <div className="content1">
         <div className="charts">
           <div className="charts-head1">
@@ -22,7 +25,6 @@ const Home = () => {
             <p>Block-wise Grievance Distribution: Bar Chart Analysis</p>
           </div>
           <BarChartBlock modalOpen={modalOpen} />
-          
         </div>
         <div className="charts">
           <div className="charts-head4">
@@ -41,11 +43,7 @@ const Home = () => {
           <BarChartwithTime modalOpen={modalOpen} />
         </div>
       </div> */}
-      <div className="content2">
-        <GrievancesTable modalOpen={modalOpen} setModalOpen={setModalOpen} />
-      </div>
     </div>
-    
   );
 }
 

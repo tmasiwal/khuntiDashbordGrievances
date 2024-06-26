@@ -7,43 +7,40 @@
   font-size: 18px;
   letter-spacing: 1px;
   text-decoration: none;
-  color: #725AC1;
+  color: #725ac1;
   background: transparent;
   cursor: pointer;
   transition: ease-out 0.5s;
-  border: 2px solid #725AC1;
+  border: 2px solid #725ac1;
   border-radius: 10px;
-  box-shadow: inset 0 0 0 0 #725AC1;
+  box-shadow: inset 0 0 0 0 #725ac1;
 }
 
 .button-table:hover {
   color: white;
-  box-shadow: inset 0 -100px 0 0 #725AC1;
+  box-shadow: inset 0 -100px 0 0 #725ac1;
 }
 
 .button-table:active {
   transform: scale(0.9);
 }
 
-.TableContainer{
-   display: flex;
-   flex-direction: column;
-   align-items: center;
-/* gap: 10px; */
-  
+.TableContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* gap: 10px; */
 }
-.buttonGroup-table{
-   
-   display: flex;
-   justify-content: center;
-   align-items: center;
-   text-align: center;
-   /* gap: 20px; */
-   /* border: 2px solid red; */
+.buttonGroup-table {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  /* gap: 20px; */
+  /* border: 2px solid red; */
 }
-.buttonGroup-table p{
-
-    position: relative;
+.buttonGroup-table p {
+  position: relative;
   display: inline-block;
   /* margin: 15px; */
   padding: 1px 30px;
@@ -51,13 +48,13 @@
   font-size: 18px;
   letter-spacing: 1px;
   text-decoration: none;
-  color: #725AC1;
+  color: #725ac1;
   background: transparent;
   cursor: pointer;
   transition: ease-out 0.5s;
   /* border: 2px solid #725AC1; */
   border-radius: 10px;
-  box-shadow: inset 0 0 0 0 #725AC1;
+  box-shadow: inset 0 0 0 0 #725ac1;
 }
 .TableContainer {
   width: 100%;
@@ -88,7 +85,7 @@
 .flex-container {
   display: flex;
   justify-content: space-between;
-  
+
   width: 100%;
 }
 
