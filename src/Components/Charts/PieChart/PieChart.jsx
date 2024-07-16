@@ -4,7 +4,7 @@ import axios from "axios";
 
 const PieChartHighlight = ({ modalOpen }) => {
   const [grievance, setgrievance] = useState([]);
-  const [chartHeight, setChartHeight] = useState(window.innerWidth * 0.2);
+  const [chartHeight, setChartHeight] = useState(window.innerWidth * 0.18);
   const loginuser = JSON.parse(localStorage.getItem("loginuser"));
 
  
@@ -51,7 +51,7 @@ const PieChartHighlight = ({ modalOpen }) => {
     fetchData();
 
     const handleResize = () => {
-      setChartHeight(window.innerWidth * 0.2); // Adjust the height factor as needed
+      setChartHeight(window.innerWidth * 0.18); // Adjust the height factor as needed
     };
     window.addEventListener("resize", handleResize);
 

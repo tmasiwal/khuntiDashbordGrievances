@@ -1,11 +1,14 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import "./index.css"
 import PieChartHiglight from '../Charts/PieChart/PieChart'
 import BarChartBlock from '../Charts/BarChart/BarChartBlock'
 import BarChartwithTime from '../Charts/BarChart/BarChartwithTime'
 import GrievancesTable from '../Table/GrievancesTable'
+
 const Home = () => {
   const [modalOpen, setModalOpen] = useState(false);
+ 
+
   return (
     <div className="home-main">
       <div className="content2">

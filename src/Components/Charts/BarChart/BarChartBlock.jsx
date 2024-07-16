@@ -5,7 +5,7 @@ import TextField from "@mui/material/TextField";
 import { MyContext } from "../../../main";
 const BarChartBlock = ({ modalOpen }) => {
   const [data, setData] = useState([]);
-  const [chartHeight, setChartHeight] = useState(window.innerWidth * 0.2);
+  const [chartHeight, setChartHeight] = useState(window.innerWidth * 0.18);
 
   const { ranges, setRanges } = useContext(MyContext);
   const loginuser = JSON.parse(localStorage.getItem("loginuser"));
@@ -61,7 +61,7 @@ const BarChartBlock = ({ modalOpen }) => {
         });
     }
     const handleResize = () => {
-      setChartHeight(window.innerWidth * 0.2);
+      setChartHeight(window.innerWidth * 0.18);
     };
     window.addEventListener("resize", handleResize);
 

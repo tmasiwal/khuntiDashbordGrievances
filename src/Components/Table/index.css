@@ -85,6 +85,7 @@
 .flex-container {
   display: flex;
   justify-content: space-between;
+  align-items: center;
 
   width: 100%;
 }
@@ -95,4 +96,23 @@
   margin: 0; /* Remove default margins */
   padding: 8px; /* Add some padding */
   font-size: 14px; /* Set a common font size */
+}
+/*  */
+.unique-user{
+  /* border: 2px solid red; */
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid  rgb(184, 178, 178);  
+  height: 40px;
+  padding: 9px 14px;
+  margin-top: 9px;
+  border-radius: 4px;
+font: inherit;
+font-weight: 400;
+font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+    line-height: 1.4375em;
+    color: rgba(0, 0, 0, 0.87);
+    font-size: 1rem;
 }

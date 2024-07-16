@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useContext,useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import {
   Paper,
   Table,
@@ -12,16 +12,27 @@ import {
   Box,
   Typography,
   Button,
-  ButtonGroup,
   TextField,
+  TablePagination,
+  styled,
 } from "@mui/material";
 import "./index.css";
 import dayjs from "dayjs";
-import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { MyContext } from "../../main";
+
+const StyledTablePagination = styled(TablePagination)`
+  height: 35px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  /* border: 2px solid red; */
+  cursor: pointer;
+  overflow: hidden;
+  /* position: absolute;
+  right: 0;
+  bottom: -45px; */
+`;
+
 const columns = [
   { id: "name", label: "Name", minWidth: 10 },
   { id: "block", label: "Block", minWidth: 10 },
@@ -47,12 +58,16 @@ const getStatus = (state) => {
 };
 
 const GrievancesTable = ({ modalOpen, setModalOpen }) => {
-  const [grievancesData, setGrievancesData] = useState({});
-  const [currentPage, setCurrentPage] = useState(1);
+  const [grievancesData, setGrievancesData] = useState({
+    grievances: [],
+    totalPages: 0,
+    totalItems: 0,
+  });
+  const [currentPage, setCurrentPage] = useState(0); // MUI TablePagination is zero-based
   const [selectedGrievance, setSelectedGrievance] = useState(null);
   const loginuser = JSON.parse(localStorage.getItem("loginuser"));
- 
   const [selectedState, setSelectedState] = useState("total");
+  const { ranges, setRanges } = useContext(MyContext);
 
   const modalStyle = {
     position: "absolute",
@@ -65,25 +80,52 @@ const GrievancesTable = ({ modalOpen, setModalOpen }) => {
     boxShadow: 24,
     p: 4,
   };
-  const { ranges, setRanges } = useContext(MyContext);
 
   useEffect(() => {
     const fetchGrievances = () => {
-      
-   
-      const url =
-        loginuser === "admin"
-          ? `https://grievanceskhuntibacked.onrender.com/grievances?page=${currentPage}&range=${ranges.selectedRange}&state=${selectedState}`
-          : `https://grievanceskhuntibacked.onrender.com/grievances?page=${currentPage}&block=${loginuser}&range=${ranges.selectedRange}&state=${selectedState}`;
+      let url = "";
+      if (loginuser === "admin") {
+        url = `https://grievanceskhuntibacked.onrender.com/grievances?page=${
+          currentPage + 1
+        }&range=${ranges.selectedRange}&state=${selectedState}&limit=10`;
+      } else {
+        url = `https://grievanceskhuntibacked.onrender.com/grievances?page=${
+          currentPage + 1
+        }&block=${loginuser}&range=${
+          ranges.selectedRange
+        }&state=${selectedState}&limit=10`;
+      }
 
-      axios(url)
-        .then((res) => setGrievancesData(res.data))
-        .catch((error) => console.error("Failed to fetch grievances:", error));
+      axios
+        .get(url)
+        .then((res) => {
+          setGrievancesData({
+            grievances: res.data.grievances,
+            totalPages: res.data.totalPages,
+            totalItems: res.data.totalGrievances,
+          });
+        })
+        .catch((error) => {
+          console.error("Failed to fetch grievances:", error);
+        });
     };
 
     fetchGrievances();
   }, [currentPage, modalOpen, loginuser, ranges, selectedState]);
+ const [uniqueUser, setUniqueUser] = useState(0);
 
+ useEffect(() => {
+   axios
+     .get(`https://grievanceskhuntibacked.onrender.com/uniqueUser`)
+     .then((res) => {
+       // Handle the response
+       setUniqueUser(res.data.totalUniqueUser);
+       console.log(res.data);
+     })
+     .catch((err) => {
+       console.log(err);
+     });
+ }, []);
   const rows = grievancesData.grievances?.map((grievance) => ({
     name: grievance.body.name,
     block: grievance.body.block,
@@ -93,16 +135,15 @@ const GrievancesTable = ({ modalOpen, setModalOpen }) => {
     status: getStatus(grievance.state),
     id: grievance._id,
     action: grievance.action,
-    date: grievance.timestamp,
+    date: dayjs(grievance.timestamp).format("DD/MM/YYYY"), // Format date
   }));
 
-  const handleButtonClick = (increment) => {
-    setCurrentPage((prevPage) => prevPage + increment);
+  const handleChangePage = (event, newPage) => {
+    setCurrentPage(newPage);
   };
 
   const handleRowClick = (grievance) => {
     setSelectedGrievance(grievance);
-    console.log(grievance)
     setModalOpen(true);
   };
 
@@ -113,10 +154,13 @@ const GrievancesTable = ({ modalOpen, setModalOpen }) => {
 
   const handleStateChange = (newState) => {
     axios
-      .put(`https://grievanceskhuntibacked.onrender.com/grievances/${selectedGrievance.id}`, {
-        state: newState,
-        action: Math.floor(Date.now() / 1000),
-      })
+      .put(
+        `https://grievanceskhuntibacked.onrender.com/grievances/${selectedGrievance.id}`,
+        {
+          state: newState,
+          action: Math.floor(Date.now() / 1000),
+        }
+      )
       .then(() => {
         setGrievancesData((prevData) => ({
           ...prevData,
@@ -134,41 +178,37 @@ const GrievancesTable = ({ modalOpen, setModalOpen }) => {
   };
 
   const handleStatusChange = (e) => {
-    
     setSelectedState(e.target.value);
+    setCurrentPage(0); // Reset page to 0 when changing status/filter
   };
 
   return (
-    <Paper
-      sx={{ width: "100%", overflow: "auto" }}
-      className="TableContainer"
-    >
+    <Paper sx={{ width: "100%" }} className="TableContainer">
       <div className="flex-container">
-        <div></div>
-
-        <div className="buttonGroup-table ">
-          <button
-            disabled={currentPage === 1}
-            onClick={() => handleButtonClick(-1)}
-            className="button-table"
-          >
-            {currentPage - 1}
-          </button>
-          <p>Page {currentPage}</p>
-          <button
-            disabled={currentPage === grievancesData.totalPages}
-            onClick={() => handleButtonClick(1)}
-            className="button-table"
-          >
-            {currentPage + 1}
-          </button>
-        </div>
-
         <TextField
           select
           label="Select Status"
           value={selectedState}
-          onChange={(e) => handleStatusChange(e)}
+          onChange={handleStatusChange}
+          SelectProps={{
+            native: true,
+          }}
+          variant="outlined"
+          margin="normal"
+          size="small"
+          className="text-field common-size"
+        >
+          <option value="2">Completed</option>
+          <option value="3">Rejected</option>
+          <option value="1">Pending</option>
+          <option value="total">All Grievances</option>
+        </TextField>
+        <div className="unique-user">Total Unique Visitors {uniqueUser}</div>
+        <TextField
+          select
+          label="Services Use"
+          value={selectedState}
+          onChange={handleStatusChange}
           SelectProps={{
             native: true,
           }}
@@ -183,7 +223,7 @@ const GrievancesTable = ({ modalOpen, setModalOpen }) => {
           <option value="total">All Grievances</option>
         </TextField>
       </div>
-      <TableContainer sx={{ maxHeight: 190 }}>
+      <TableContainer sx={{ maxHeight: 200 }}>
         <Table stickyHeader aria-label="sticky table">
           <TableHead>
             <TableRow>
@@ -191,7 +231,13 @@ const GrievancesTable = ({ modalOpen, setModalOpen }) => {
                 <TableCell
                   key={column.id}
                   style={{ minWidth: column.minWidth }}
-                  sx={{ backgroundColor: "rgb(2, 74, 73)", color: "white" }}
+                  sx={{
+                    backgroundColor: "rgb(2, 74, 73)",
+                    color: "white",
+                    height: "10px",
+                    padding: "5px",
+                    textAlign: "center",
+                  }}
                 >
                   {column.label}
                 </TableCell>
@@ -207,27 +253,52 @@ const GrievancesTable = ({ modalOpen, setModalOpen }) => {
                 key={index}
                 onClick={() => handleRowClick(row)}
                 sx={{
-                  backgroundColor:
-                    row.status === "Rejected"
-                      ? "rgb(242, 96, 59)"
-                      : row.status === "Completed"
-                      ? "rgb(131, 203, 84)"
-                      : "rgb(226, 201, 111)",
+                  height: 30, // Adjust the height of the row
                 }}
               >
-                {columns.map((column) => {
-                  const value = row[column.id];
-                  return (
-                    <TableCell key={column.id} align={column.align}>
-                      {value}
-                    </TableCell>
-                  );
-                })}
+                {columns.map((column) => (
+                  <TableCell
+                    key={column.id}
+                    align="center" // Center the text
+                    sx={{
+                      ...(column.id === "status" && {
+                        backgroundColor:
+                          row.status === "Rejected"
+                            ? "rgb(242, 96, 59)"
+                            : row.status === "Completed"
+                            ? "rgb(131, 203, 84)"
+                            : "rgb(226, 201, 111)",
+                      }),
+                      padding: "2px 16px 2px 16px",
+                    }}
+                  >
+                    {row[column.id]}
+                  </TableCell>
+                ))}
               </TableRow>
             ))}
           </TableBody>
         </Table>
       </TableContainer>
+
+      <Box
+        sx={{
+          width: "100%",
+          display: "flex",
+          justifyContent: "flex-end",
+          alignItems: "center",
+        }}
+      >
+        <StyledTablePagination
+          rowsPerPageOptions={[10]}
+          component="div"
+          count={grievancesData.totalItems}
+          rowsPerPage={10}
+          page={currentPage}
+          onPageChange={handleChangePage}
+          className="table-pagination"
+        />
+      </Box>
 
       <Modal
         open={modalOpen}
@@ -265,27 +336,30 @@ const GrievancesTable = ({ modalOpen, setModalOpen }) => {
               <Typography sx={{ mt: 2 }} color="black">
                 <strong>Sender:</strong> {selectedGrievance.sender}
               </Typography>
-
+              <Typography sx={{ mt: 2 }} color="black">
+                <strong>Status:</strong> {selectedGrievance.status}
+              </Typography>
+              <Typography sx={{ mt: 2 }} color="black">
+                <strong>Date:</strong> {selectedGrievance.date}
+              </Typography>
               <Box
-                sx={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  bgcolor: "background.paper",
-                  borderRadius: 1,
-                }}
+                sx={{ display: "flex", justifyContent: "space-between", mt: 2 }}
               >
-                <Typography sx={{ mt: 2 }} color="black">
-                  <strong>Status:</strong> {selectedGrievance.status}
-                </Typography>
-                <Typography sx={{ mt: 2 }} color="black">
-                  <strong>Date:</strong> {selectedGrievance.date}
-                </Typography>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={() => handleStateChange(2)}
+                >
+                  Mark as Completed
+                </Button>
+                <Button
+                  variant="contained"
+                  color="secondary"
+                  onClick={() => handleStateChange(3)}
+                >
+                  Reject
+                </Button>
               </Box>
-              <ButtonGroup variant="contained" sx={{ mt: 2 }}>
-                <Button onClick={() => handleStateChange(1)}>Pending</Button>
-                <Button onClick={() => handleStateChange(2)}>Completed</Button>
-                <Button onClick={() => handleStateChange(3)}>Rejected</Button>
-              </ButtonGroup>
             </>
           )}
         </Box>

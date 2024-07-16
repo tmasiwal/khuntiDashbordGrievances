@@ -17,8 +17,7 @@ const Navbars = () => {
   const handleLogout = () => {
     // Remove user authentication token or information from local storage
     localStorage.removeItem("loginuser");
-    // console.log("hello logout!");
-    setIsLoggedIn(false)
+    setIsLoggedIn(false);
     // Redirect user to login page
     navigate("/login");
   };
@@ -26,7 +25,6 @@ const Navbars = () => {
   // Check if the user is logged in based on localStorage
   const checkLoggedIn = () => {
     const user = localStorage.getItem("loginuser");
-    // console.log(user, "nav");
     return user ? true : false;
   };
 
@@ -60,13 +58,8 @@ const Navbars = () => {
       <Container fluid>
         <Navbar.Brand href="/">खूँटी KHUNTI</Navbar.Brand>
         <Navbar.Toggle aria-controls="navbarScroll" />
-
         <Navbar.Collapse id="navbarScroll">
-          <Nav
-            className="my-2 my-lg-0 ms-auto"
-            style={{ maxHeight: "100px"  }}
-            navbarScroll
-          >
+          <Nav className="my-2 my-lg-0 ms-auto" navbarScroll>
             <NavDropdown title={displayedTimeRange} id="basic-nav-dropdown">
               <NavDropdown.Item onClick={() => handleChange("today")}>
                 Today

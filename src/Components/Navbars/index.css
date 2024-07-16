@@ -1,23 +1,34 @@
-.navbar-custom{
+.navbar-custom {
   background-color: rgb(57, 56, 56);
   color: #FFFFFF;
   width: 100%;
-  /* margin-bottom: 10px; */
   position: fixed;
   top: 0;
   left: 0;
   z-index: 9999;
-  
+  padding-top: 5px; /* Reduce top padding */
+  padding-bottom: 5px; /* Reduce bottom padding */
 }
+
 .navbar-custom .navbar-brand,
 .navbar-custom .nav-link,
 .navbar-custom .navbar-toggler {
   color: rgb(243, 232, 232) !important;
+  padding-top: 0 !important; /* Reduce padding */
+  padding-bottom: 0 !important; /* Reduce padding */
 }
 
+.navbar-nav > li > a {
+  padding-top: 5px !important; /* Reduce padding */
+  padding-bottom: 5px !important; /* Reduce padding */
+}
 
-@media screen  and (max-width: 1080px){
-    .navbar-bg-color{
-      background-color: rgb(72,180,255);
-    }
+.navbar {
+  min-height: 40px !important; /* Reduce min-height */
+}
+
+@media screen and (max-width: 1080px) {
+  .navbar-bg-color {
+    background-color: rgb(72, 180, 255);
+  }
 }

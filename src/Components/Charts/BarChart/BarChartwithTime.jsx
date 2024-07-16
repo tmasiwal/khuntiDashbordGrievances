@@ -6,7 +6,7 @@ import { MyContext } from "../../../main";
 
 const BarChartBlock = ({ modalOpen }) => {
   const [grievanceData, setGrievanceData] = useState([]);
-  const [chartHeight, setChartHeight] = useState(window.innerWidth * 0.2);
+  const [chartHeight, setChartHeight] = useState(window.innerWidth * 0.18);
   const [loading, setLoading] = useState(false);
   const loginuser = JSON.parse(localStorage.getItem("loginuser"));
   const { ranges } = useContext(MyContext);
@@ -34,7 +34,7 @@ const BarChartBlock = ({ modalOpen }) => {
     fetchData();
 
     const handleResize = () => {
-      setChartHeight(window.innerWidth * 0.2);
+      setChartHeight(window.innerWidth * 0.18);
     };
     window.addEventListener("resize", handleResize);
 
