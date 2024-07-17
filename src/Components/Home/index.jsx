@@ -32,7 +32,7 @@ const Home = () => {
         <div className="charts">
           <div className="charts-head4">
             <img />
-            <p>Comparative Analysis of Grievance Response Rates by Block</p>
+            <p>Grievance Response Rates Across Blocks</p>
           </div>
           <BarChartwithTime />
         </div>
