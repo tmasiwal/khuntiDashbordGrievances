@@ -1,18 +1,17 @@
+
 import React, { useEffect, useState } from "react";
 import { Chart } from "react-google-charts";
 import axios from "axios";
 
 const PieChartHighlight = ({ modalOpen }) => {
-  const [grievance, setgrievance] = useState([]);
+  const [grievance, setGrievance] = useState([]);
   const [chartHeight, setChartHeight] = useState(window.innerWidth * 0.18);
   const loginuser = JSON.parse(localStorage.getItem("loginuser"));
-
- 
   const [data, setData] = useState([
     ["Status", "Count"],
     ["Pending", 0],
     ["Completed", 0],
-    ["Reject", 0],
+    ["Rejected", 0],
   ]);
 
   useEffect(() => {
@@ -29,9 +28,15 @@ const PieChartHighlight = ({ modalOpen }) => {
           );
         }
 
-        setgrievance(res.data);
+        setGrievance(res.data);
 
-        const newData = [...data];
+        const newData = [
+          ["Status", "Count"],
+          ["Pending", 0],
+          ["Completed", 0],
+          ["Rejected", 0],
+        ];
+
         res.data.forEach((el) => {
           if (el.state === 1) {
             newData[1][1] = el.count;
@@ -51,15 +56,20 @@ const PieChartHighlight = ({ modalOpen }) => {
     fetchData();
 
     const handleResize = () => {
-      setChartHeight(window.innerWidth * 0.18); // Adjust the height factor as needed
+      if (window.innerWidth < 768) {
+        setChartHeight(200); // Fixed height for mobile view
+      } else {
+        setChartHeight(window.innerWidth * 0.18); // Adjusted height for larger screens
+      }
     };
+
+    handleResize(); // Call once to set the initial height
     window.addEventListener("resize", handleResize);
 
-    // Cleanup event listener on component unmount
     return () => {
       window.removeEventListener("resize", handleResize);
     };
-  }, [modalOpen]);
+  }, [modalOpen, loginuser]);
 
   const options = {
     legend: "none",
@@ -69,7 +79,7 @@ const PieChartHighlight = ({ modalOpen }) => {
   };
 
   return (
-    <div style={{ width: "100%",  }}>
+    <div style={{ width: "100%" }}>
       <Chart
         chartType="PieChart"
         data={data}
@@ -82,3 +92,4 @@ const PieChartHighlight = ({ modalOpen }) => {
 };
 
 export default PieChartHighlight;
+

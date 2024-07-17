@@ -1,7 +1,8 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState, useCallback } from "react";
 import { Chart } from "react-google-charts";
 import { Box } from "@mui/material";
 import axios from "axios";
+import debounce from "lodash.debounce";
 import { MyContext } from "../../../main";
 
 const BarChartBlock = ({ modalOpen }) => {
@@ -12,7 +13,6 @@ const BarChartBlock = ({ modalOpen }) => {
   const { ranges } = useContext(MyContext);
 
   useEffect(() => {
-    setGrievanceData([])
     const fetchData = async () => {
       setLoading(true);
       let url;
@@ -33,9 +33,15 @@ const BarChartBlock = ({ modalOpen }) => {
 
     fetchData();
 
-    const handleResize = () => {
-      setChartHeight(window.innerWidth * 0.18);
-    };
+    const handleResize = debounce(() => {
+      if (window.innerWidth < 768) {
+        setChartHeight(200); // Fixed height for mobile view
+      } else {
+        setChartHeight(window.innerWidth * 0.18); // Adjusted height for larger screens
+      }
+    }, 100);
+
+    handleResize(); // Call once to set the initial height
     window.addEventListener("resize", handleResize);
 
     return () => {
@@ -43,7 +49,7 @@ const BarChartBlock = ({ modalOpen }) => {
     };
   }, [ranges, modalOpen, loginuser]);
 
-  const calculatePercentages = (item) => {
+  const calculatePercentages = useCallback((item) => {
     let sum = 0;
     let pending = 0;
     let rejected = 0;
@@ -66,14 +72,13 @@ const BarChartBlock = ({ modalOpen }) => {
       block: item.block,
       percentageOfResponse: sum > 0 ? ((rejected + completed) / sum) * 100 : 0,
     };
-  };
+  }, []);
 
   const percentages = grievanceData?.map(calculatePercentages) || [];
   const chartData = [
     ["Blocks", "Percentage of Response"],
     ...percentages.map((item) => [item.block, item.percentageOfResponse]),
   ];
-  // console.log(chartData, "chart data");
 
   return (
     <Box sx={{ position: "relative", padding: "0px 10px 0px 10px" }}>
@@ -89,9 +94,15 @@ const BarChartBlock = ({ modalOpen }) => {
           },
           legend: { position: "none" },
         }}
+        loader={<div>Loading Chart</div>}
       />
     </Box>
   );
 };
 
 export default BarChartBlock;
+
+
+
+
+

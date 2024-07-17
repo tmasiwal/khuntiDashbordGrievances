@@ -1,23 +1,21 @@
-import React, {useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState, useCallback } from "react";
 import { Chart } from "react-google-charts";
 import axios from "axios";
-import TextField from "@mui/material/TextField";
+import debounce from "lodash.debounce";
 import { MyContext } from "../../../main";
+
 const BarChartBlock = ({ modalOpen }) => {
   const [data, setData] = useState([]);
   const [chartHeight, setChartHeight] = useState(window.innerWidth * 0.18);
 
-  const { ranges, setRanges } = useContext(MyContext);
+  const { ranges } = useContext(MyContext);
   const loginuser = JSON.parse(localStorage.getItem("loginuser"));
-  let xAxisData;
+  const xAxisData =
+    loginuser === "admin"
+      ? ["Arki", "Khunti", "Murhu", "Rania", "Torpa", "Karra"]
+      : [loginuser];
 
-  if (loginuser === "admin") {
-    xAxisData = ["Arki", "Khunti", "Murhu", "Rania", "Torpa", "Karra"];
-  } else {
-    xAxisData = [loginuser];
-  }
-
-  const initializeChartData = () => {
+  const initializeChartData = useCallback(() => {
     const chartData = [["Blocks", "Pending", "Completed", "Rejected"]];
 
     xAxisData.forEach((block) => {
@@ -31,56 +29,53 @@ const BarChartBlock = ({ modalOpen }) => {
     });
 
     return chartData;
-  };
-
-  const chartData = initializeChartData();
+  }, [data, xAxisData]);
 
   useEffect(() => {
-    setData([])
-    if (loginuser === "admin") {
-      axios
-        .get(
-          `https://grievanceskhuntibacked.onrender.com/grievances/block-and-date?range=${ranges.selectedRange}`
-        )
-        .then((res) => {
-          setData(res.data);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    } else {
-      axios
-        .get(
-          `https://grievanceskhuntibacked.onrender.com/grievances/block-and-date?block=${loginuser}&range=${ranges.selectedRange}`
-        )
-        .then((res) => {
-          setData(res.data);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    }
-    const handleResize = () => {
-      setChartHeight(window.innerWidth * 0.18);
+    const fetchData = async () => {
+      setData([]);
+      try {
+        const response = await axios.get(
+          `https://grievanceskhuntibacked.onrender.com/grievances/block-and-date`,
+          {
+            params:
+              loginuser === "admin"
+                ? { range: ranges.selectedRange }
+                : { block: loginuser, range: ranges.selectedRange },
+          }
+        );
+        setData(response.data);
+      } catch (err) {
+        console.log(err);
+      }
     };
+
+    fetchData();
+
+    const handleResize = debounce(() => {
+      if (window.innerWidth < 768) {
+        setChartHeight(200); // Fixed height for mobile view
+      } else {
+        setChartHeight(window.innerWidth * 0.18); // Adjusted height for larger screens
+      }
+    }, 100);
+
+    handleResize(); // Call once to set the initial height
     window.addEventListener("resize", handleResize);
 
     return () => {
       window.removeEventListener("resize", handleResize);
     };
-  }, [modalOpen, ranges]);
-
- 
+  }, [modalOpen, ranges, loginuser]);
 
   return (
-    <div style={{ position: "relative" ,padding:"0px 10px 0px 10px" }}>
-      
+    <div style={{ position: "relative", padding: "0px 10px 0px 10px" }}>
       <Chart
         width={"100%"}
         height={chartHeight}
         chartType="Bar"
         loader={<div>Loading Chart</div>}
-        data={chartData}
+        data={initializeChartData()}
         options={{
           chart: {
             title: "Total Grievances in Blocks",
