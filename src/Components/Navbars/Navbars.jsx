@@ -3,26 +3,23 @@ import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import NavDropdown from "react-bootstrap/NavDropdown";
-import { useNavigate } from "react-router-dom"; // Import useNavigate hook
+import { useNavigate } from "react-router-dom";
 import "./index.css";
-import { MyContext } from "../../main"; // Adjust the import path accordingly
+import { MyContext } from "../../main";
 
 const Navbars = () => {
   const { ranges, setRanges } = useContext(MyContext);
-  const navigate = useNavigate(); // Initialize navigate hook
-  const [isLoggedIn, setIsLoggedIn] = useState(false); // Define isLoggedIn state
+  const navigate = useNavigate();
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [displayedTimeRange, setDisplayedTimeRange] = useState("Today");
+  const [isNavExpanded, setIsNavExpanded] = useState(false); // Track navbar expansion
 
-  // Function to handle logout
   const handleLogout = () => {
-    // Remove user authentication token or information from local storage
     localStorage.removeItem("loginuser");
     setIsLoggedIn(false);
-    // Redirect user to login page
     navigate("/login");
   };
 
-  // Check if the user is logged in based on localStorage
   const checkLoggedIn = () => {
     const user = localStorage.getItem("loginuser");
     return user ? true : false;
@@ -30,20 +27,10 @@ const Navbars = () => {
 
   const handleChange = (e) => {
     setRanges({ selectedRange: e });
-    if (e === "today") {
-      setDisplayedTimeRange("Today");
-    } else if (e === "week") {
-      setDisplayedTimeRange("Last week");
-    } else if (e === "month") {
-      setDisplayedTimeRange("Last Month");
-    } else if (e === "year") {
-      setDisplayedTimeRange("Last Year");
-    } else if (e === "total") {
-      setDisplayedTimeRange("Total Grievance");
-    }
+    setDisplayedTimeRange(e.charAt(0).toUpperCase() + e.slice(1));
+    setIsNavExpanded(false); // Close navbar
   };
 
-  // Set initial login state
   useEffect(() => {
     setIsLoggedIn(checkLoggedIn());
     localStorage.setItem("selectedRange", ranges.selectedRange);
@@ -54,10 +41,14 @@ const Navbars = () => {
       expand="lg"
       className="bg-indigo-200 border-bottom px-3 navbar-custom navbar-bg-color"
       style={{ color: "white" }}
+      expanded={isNavExpanded} // Set expanded state
     >
       <Container fluid>
         <Navbar.Brand href="/">खूँटी KHUNTI</Navbar.Brand>
-        <Navbar.Toggle aria-controls="navbarScroll" />
+        <Navbar.Toggle
+          onClick={() => setIsNavExpanded(!isNavExpanded)}
+          aria-controls="navbarScroll"
+        />
         <Navbar.Collapse id="navbarScroll">
           <Nav className="my-2 my-lg-0 ms-auto" navbarScroll>
             <NavDropdown title={displayedTimeRange} id="basic-nav-dropdown">
@@ -79,7 +70,7 @@ const Navbars = () => {
             </NavDropdown>
             <Nav.Link href="/">Home</Nav.Link>
             {isLoggedIn ? (
-              <Nav.Link onClick={handleLogout}>Logout</Nav.Link> // Logout button
+              <Nav.Link onClick={handleLogout}>Logout</Nav.Link>
             ) : (
               <Nav.Link href="/login">Login</Nav.Link>
             )}

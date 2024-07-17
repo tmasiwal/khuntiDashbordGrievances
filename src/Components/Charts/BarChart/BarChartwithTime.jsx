@@ -89,7 +89,7 @@ const BarChartBlock = ({ modalOpen }) => {
         data={chartData}
         options={{
           chart: {
-            title: "Percentage of Response in Grievances",
+         
             subtitle: "Blocks vs Percentage",
           },
           legend: { position: "none" },
