@@ -124,5 +124,6 @@ font-family: "Roboto", "Helvetica", "Arial", sans-serif;
 @media screen and (max-width: 520px) {
  .dropdown-button{
   width: 90px;
+  font-size: 10px;
 }
 }

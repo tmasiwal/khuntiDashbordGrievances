@@ -15,6 +15,7 @@ const BarChartBlock = ({ modalOpen }) => {
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
+      setGrievanceData([])
       let url;
       try {
         if (loginuser === "admin") {
@@ -79,7 +80,7 @@ const BarChartBlock = ({ modalOpen }) => {
     ["Blocks", "Percentage of Response"],
     ...percentages.map((item) => [item.block, item.percentageOfResponse]),
   ];
-
+console.log(grievanceData);
   return (
     <Box sx={{ position: "relative", padding: "0px 10px 0px 10px" }}>
       <Chart
