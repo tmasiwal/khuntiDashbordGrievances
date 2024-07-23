@@ -116,3 +116,7 @@ font-family: "Roboto", "Helvetica", "Arial", sans-serif;
     color: rgba(0, 0, 0, 0.87);
     font-size: 1rem;
 }
+
+.dropdown-button{
+  width: 200px;
+}
