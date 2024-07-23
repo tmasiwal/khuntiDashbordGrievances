@@ -19,9 +19,9 @@ const BarChartBlock = ({ modalOpen }) => {
       let url;
       try {
         if (loginuser === "admin") {
-          url = `https://grievanceskhuntibacked.onrender.com/grievances/date?range=${ranges.selectedRange}`;
+          url = `http://20.197.12.216:7778/grievances/date?range=${ranges.selectedRange}`;
         } else {
-          url = `https://grievanceskhuntibacked.onrender.com/grievances/date?range=${ranges.selectedRange}&block=${loginuser}`;
+          url = `http://20.197.12.216:7778/grievances/date?range=${ranges.selectedRange}&block=${loginuser}`;
         }
         const response = await axios.get(url);
         setGrievanceData(response.data);

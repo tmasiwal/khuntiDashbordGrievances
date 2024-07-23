@@ -20,11 +20,11 @@ const PieChartHighlight = ({ modalOpen }) => {
         let res;
         if (loginuser === "admin") {
           res = await axios.get(
-            `https://grievanceskhuntibacked.onrender.com/grievances/grievance-count`
+            `http://20.197.12.216:7778/grievances/grievance-count`
           );
         } else {
           res = await axios.get(
-            `https://grievanceskhuntibacked.onrender.com/grievances/grievance-count?block=${loginuser}`
+            `http://20.197.12.216:7778/grievances/grievance-count?block=${loginuser}`
           );
         }
 

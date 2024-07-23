@@ -10,7 +10,7 @@ const Login = () => {
   const handleLogin = (e) => {
     e.preventDefault();
     axios
-      .get(`https://grievanceskhuntibacked.onrender.com/users?email=${email}&password=${password}`)
+      .get(`http://20.197.12.216:7778/users?email=${email}&password=${password}`)
       .then((res) => {
         // Assuming the response data is the user data
         localStorage.setItem("loginuser", JSON.stringify(res.data.block));

@@ -36,7 +36,7 @@ const BarChartBlock = ({ modalOpen }) => {
       setData([]);
       try {
         const response = await axios.get(
-          `https://grievanceskhuntibacked.onrender.com/grievances/block-and-date`,
+          `http://20.197.12.216:7778/grievances/block-and-date`,
           {
             params:
               loginuser === "admin"
