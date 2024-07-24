@@ -143,7 +143,7 @@ const GrievancesTable = ({ modalOpen, setModalOpen }) => {
     status: getStatus(grievance.state),
     id: grievance._id,
     action: grievance.action,
-    date: dayjs(grievance.timestamp).format("DD/MM/YYYY"), // Format date
+    date: grievance.timestamp // Format date
   }));
 
   const handleChangePage = (event, newPage) => {
@@ -153,6 +153,7 @@ const GrievancesTable = ({ modalOpen, setModalOpen }) => {
   const handleRowClick = (grievance) => {
     setSelectedGrievance(grievance);
     setModalOpen(true);
+    // console.log(grievance)
   };
 
   const handleCloseModal = () => {
@@ -197,7 +198,7 @@ const GrievancesTable = ({ modalOpen, setModalOpen }) => {
   const handleMenuClose = () => {
     setAnchorEl(null);
   };
-console.log(services);
+console.log(grievancesData,"ggg");
   return (
     <Paper sx={{ width: "100%" }} className="TableContainer">
       <div className="flex-container">
@@ -240,7 +241,7 @@ console.log(services);
           {/* Replace these with your actual service details and counts */}
           {services.map((services, index) => {
             return (
-              <MenuItem onClick={handleMenuClose}>
+              <MenuItem onClick={handleMenuClose} key={index}>
                 {services.serviceName}  : {services.totalCount}
               </MenuItem>
             );
